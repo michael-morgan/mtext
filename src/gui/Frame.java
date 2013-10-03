@@ -1,12 +1,11 @@
 package gui;
 
+import handler.Key;
 import handler.Menu;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,7 +32,7 @@ public class Frame extends JFrame implements Runnable
     private JPanel panel;
     private JMenuBar menuBar;
     private JMenu menu;
-    public JMenuItem menuNew, menuOpen, menuSave, menuSaveAs, menuExit;
+    public JMenuItem menuNew, menuOpen, menuSaveAs, menuExit;
     public JTextArea textArea;
     public JLabel page, words;
     private JScrollPane textAreaScroll;
@@ -68,6 +67,9 @@ public class Frame extends JFrame implements Runnable
         run = true;
     } //end of init method
     
+    /**
+     * initVariables method
+     */
     private void initVariables()
     {
         loop = new Thread(this);
@@ -76,7 +78,7 @@ public class Frame extends JFrame implements Runnable
         currentPage = 1;
         maxWords = 0;
         currentWords = 0;
-    }
+    } //end of initVariables method
     
     /**
      * addComponents method
@@ -110,19 +112,16 @@ public class Frame extends JFrame implements Runnable
         
         menuNew = new JMenuItem("New");
         menuOpen = new JMenuItem("Open");
-        menuSave = new JMenuItem("Save");
         menuSaveAs = new JMenuItem("Save as..");
         menuExit = new JMenuItem("Exit");
         
         menuNew.addActionListener(new Menu(this));
         menuOpen.addActionListener(new Menu(this));
-        menuSave.addActionListener(new Menu(this));
         menuSaveAs.addActionListener(new Menu(this));
         menuExit.addActionListener(new Menu(this));
         
         menu.add(menuNew);
         menu.add(menuOpen);
-        menu.add(menuSave);
         menu.add(menuSaveAs);
         menu.add(menuExit);
         
@@ -130,6 +129,7 @@ public class Frame extends JFrame implements Runnable
         
         textArea = new JTextArea();
         textArea.setLineWrap(true);
+        textArea.addKeyListener(new Key(this));
         
         textAreaScroll = new JScrollPane(textArea);
         textAreaScroll.setBounds(2, 5, 490, 514);
@@ -150,12 +150,18 @@ public class Frame extends JFrame implements Runnable
         add(panel);  
     } //end of addComponents method
     
+    /**
+     * setWordCount method
+     */
     public void setWordCount()
     {
         maxWords = (textArea.getText().length() - textArea.getText().replaceAll(" ","").length());
         words.setText("Words: " + maxWords);
-    }
+    } //end of setWordCount method
     
+    /**
+     * setPageCount method
+     */
     private void setPageCount()
     {
         if(maxWords > 2310)
@@ -170,8 +176,11 @@ public class Frame extends JFrame implements Runnable
         }
         
         page.setText("Page: " + currentPage + " of " + maxPage);
-    }
+    } //end of setPageCount method
     
+    /**
+     * run method
+     */
     @Override
     public void run()
     {
@@ -189,6 +198,6 @@ public class Frame extends JFrame implements Runnable
                 e.printStackTrace();
             }
         }
-    }
+    } //end of run method
     
 } //end of class
